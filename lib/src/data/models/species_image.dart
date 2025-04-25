@@ -1,5 +1,3 @@
-// lib/src/data/models/species_image.dart
-
 class SpeciesImage {
   final int? imageId;
   final int? license;
@@ -26,7 +24,6 @@ class SpeciesImage {
   /// Accepts a nullable JSON map. Returns a placeholder if null.
   factory SpeciesImage.fromJson(Map<String, dynamic>? json) {
     const placeholder = 'https://your.cdn.com/placeholder.png';
-
     if (json == null) {
       return const SpeciesImage(
         imageId: null,
@@ -40,7 +37,6 @@ class SpeciesImage {
         thumbnail: placeholder,
       );
     }
-
     return SpeciesImage(
       imageId: json['image_id'] as int?,
       license: json['license'] as int?,

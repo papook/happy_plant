@@ -1,5 +1,3 @@
-// lib/src/data/models/plant_details.dart
-
 import 'species_image.dart';
 
 class PlantDetails {
@@ -201,7 +199,7 @@ class PlantDetails {
       indoor: json['indoor'] as bool?,
       careLevel: json['care_level'] as String?,
       description: json['description'] as String?,
-      defaultImage: SpeciesImage.fromJson(defaultImgJson!),
+      defaultImage: SpeciesImage.fromJson(defaultImgJson),
       otherImages: toList<SpeciesImage>(
         otherImgsRaw,
         (e) => SpeciesImage.fromJson(e),

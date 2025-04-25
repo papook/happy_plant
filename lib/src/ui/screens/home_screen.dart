@@ -3,6 +3,7 @@ import '../widgets/bottom_nav_bar.dart';
 import 'explore_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

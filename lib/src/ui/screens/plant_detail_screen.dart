@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../blocs/plant_detail/plant_detail_provider.dart';
 
 class PlantDetailScreen extends ConsumerWidget {
+  const PlantDetailScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final id = ModalRoute.of(context)!.settings.arguments as int;
@@ -16,8 +18,8 @@ class PlantDetailScreen extends ConsumerWidget {
         data: (plant) {
           final info = <String, dynamic>{
             'Common Name': plant.commonName,
-            'Scientific Name': plant.scientificName?.join(', '),
-            // …all other fields…
+            'Scientific Name': plant.scientificName.join(', '),
+            // …all other non-list fields…
           };
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -25,15 +27,16 @@ class PlantDetailScreen extends ConsumerWidget {
               Image.network(plant.defaultImage.originalUrl),
               const SizedBox(height: 16),
               ...info.entries
-                  .where((e) => e.value != null)
+                  .where(
+                    (e) => e.value != null && e.value.toString().isNotEmpty,
+                  )
                   .map(
                     (e) => ListTile(
                       title: Text(e.key),
                       subtitle: Text(e.value.toString()),
                     ),
-                  )
-                  .toList(),
-              // TODO: carousel, extra benchmarks…
+                  ),
+              // TODO: carousel for otherImages, xWatering*, etc.
             ],
           );
         },

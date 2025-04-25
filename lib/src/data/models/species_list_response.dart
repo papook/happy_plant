@@ -20,11 +20,10 @@ class SpeciesListResponse {
   });
 
   factory SpeciesListResponse.fromJson(Map<String, dynamic> json) {
-    // Safely read data array
     final raw = json['data'] as List<dynamic>? ?? [];
     final parsed =
         raw
-            .whereType<Map<String, dynamic>>() // only maps
+            .whereType<Map<String, dynamic>>()
             .map(SpeciesSummary.fromJson)
             .toList();
 

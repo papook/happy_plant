@@ -1,5 +1,3 @@
-// lib/src/data/models/species_summary.dart
-
 import 'species_image.dart';
 
 class SpeciesSummary {
@@ -34,11 +32,8 @@ class SpeciesSummary {
   });
 
   factory SpeciesSummary.fromJson(Map<String, dynamic> json) {
-    // Safely turn dynamic lists into List<String>
     List<String> toStringList(dynamic raw) =>
         (raw as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
-
-    // Pull default_image as a nullable map
     final imgJson = json['default_image'] as Map<String, dynamic>?;
 
     return SpeciesSummary(

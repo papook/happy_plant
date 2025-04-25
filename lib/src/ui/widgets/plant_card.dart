@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/species_summary.dart';
 
-/// A 2×card thumbnail with image, name, up to 5 care icons
 class PlantCard extends StatelessWidget {
   final SpeciesSummary plant;
   final List<IconData> careIcons;
@@ -14,9 +13,8 @@ class PlantCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, '/detail', arguments: plant.id);
-        },
+        onTap:
+            () => Navigator.pushNamed(context, '/detail', arguments: plant.id),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -29,7 +27,7 @@ class PlantCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                plant.commonName ?? plant.scientificName?.first ?? '',
+                plant.commonName ?? plant.scientificName.first,
                 style: const TextStyle(fontWeight: FontWeight.bold),
                 overflow: TextOverflow.ellipsis,
               ),

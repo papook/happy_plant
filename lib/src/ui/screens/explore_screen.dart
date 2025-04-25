@@ -5,9 +5,8 @@ import '../widgets/plant_card.dart';
 
 class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
-
   @override
-  _ExploreScreenState createState() => _ExploreScreenState();
+  ConsumerState<ExploreScreen> createState() => _ExploreScreenState();
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
@@ -30,6 +29,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     return SafeArea(
       child: Column(
         children: [
+          // Search bar
           Padding(
             padding: const EdgeInsets.all(8),
             child: TextField(
@@ -39,10 +39,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 border: OutlineInputBorder(),
               ),
               onChanged: (q) {
-                // TODO: wire up search in notifier
+                // TODO: wire up search filter in notifier
               },
             ),
           ),
+          // Filters
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
@@ -54,7 +55,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       DropdownMenuItem(value: null, child: Text('All')),
                     ],
                     onChanged: (v) {
-                      // TODO: filter
+                      // TODO
                     },
                   ),
                 ),
@@ -66,13 +67,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       DropdownMenuItem(value: null, child: Text('All')),
                     ],
                     onChanged: (v) {
-                      // TODO: filter
+                      // TODO
                     },
                   ),
                 ),
               ],
             ),
           ),
+          // Grid
           Expanded(
             child: GridView.builder(
               controller: _scroll,
