@@ -20,17 +20,22 @@ class SpeciesListResponse {
   });
 
   factory SpeciesListResponse.fromJson(Map<String, dynamic> json) {
+    // Safely read data array
+    final raw = json['data'] as List<dynamic>? ?? [];
+    final parsed =
+        raw
+            .whereType<Map<String, dynamic>>() // only maps
+            .map(SpeciesSummary.fromJson)
+            .toList();
+
     return SpeciesListResponse(
-      data:
-          (json['data'] as List<dynamic>)
-              .map((e) => SpeciesSummary.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      to: json['to'] as int,
-      perPage: json['per_page'] as int,
-      currentPage: json['current_page'] as int,
-      from: json['from'] as int,
-      lastPage: json['last_page'] as int,
-      total: json['total'] as int,
+      data: parsed,
+      to: json['to'] as int? ?? 0,
+      perPage: json['per_page'] as int? ?? 0,
+      currentPage: json['current_page'] as int? ?? 0,
+      from: json['from'] as int? ?? 0,
+      lastPage: json['last_page'] as int? ?? 0,
+      total: json['total'] as int? ?? 0,
     );
   }
 }

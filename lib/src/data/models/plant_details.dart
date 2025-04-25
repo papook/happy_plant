@@ -1,10 +1,12 @@
+// lib/src/data/models/plant_details.dart
+
 import 'species_image.dart';
 
 class PlantDetails {
   final int id;
   final String? commonName;
-  final List<String>? scientificName;
-  final List<String>? otherName;
+  final List<String> scientificName;
+  final List<String> otherName;
   final String? family;
   final String? origin;
   final String? type;
@@ -12,18 +14,18 @@ class PlantDetails {
   final String? cycle;
   final String? watering;
   final WateringGeneralBenchmark? wateringBenchmark;
-  final List<PlantAnatomy>? plantAnatomy;
-  final List<String>? sunlight;
-  final List<String>? pruningMonth;
+  final List<PlantAnatomy> plantAnatomy;
+  final List<String> sunlight;
+  final List<String> pruningMonth;
   final PruningCount? pruningCount;
   final int? seeds;
-  final List<String>? attracts;
-  final List<String>? propagation;
+  final List<String> attracts;
+  final List<String> propagation;
   final Hardiness? hardiness;
   final HardinessLocation? hardinessLocation;
   final bool? flowers;
   final String? floweringSeason;
-  final List<String>? soil;
+  final List<String> soil;
   final dynamic pestSusceptibility;
   final bool? cones;
   final bool? fruits;
@@ -49,11 +51,11 @@ class PlantDetails {
   final String? careLevel;
   final String? description;
   final SpeciesImage defaultImage;
-  final List<SpeciesImage>? otherImages;
-  final List<String>? xWateringQuality;
-  final List<String>? xWateringPeriod;
-  final List<String>? xWateringAvgVolumeRequirement;
-  final List<String>? xWateringDepthRequirement;
+  final List<SpeciesImage> otherImages;
+  final List<String> xWateringQuality;
+  final List<String> xWateringPeriod;
+  final List<String> xWateringAvgVolumeRequirement;
+  final List<String> xWateringDepthRequirement;
   final TemperatureRange? xWateringBasedTemperature;
   final PhLevel? xWateringPhLevel;
   final SunlightDuration? xSunlightDuration;
@@ -61,8 +63,8 @@ class PlantDetails {
   PlantDetails({
     required this.id,
     this.commonName,
-    this.scientificName,
-    this.otherName,
+    required this.scientificName,
+    required this.otherName,
     this.family,
     this.origin,
     this.type,
@@ -70,18 +72,18 @@ class PlantDetails {
     this.cycle,
     this.watering,
     this.wateringBenchmark,
-    this.plantAnatomy,
-    this.sunlight,
-    this.pruningMonth,
+    required this.plantAnatomy,
+    required this.sunlight,
+    required this.pruningMonth,
     this.pruningCount,
     this.seeds,
-    this.attracts,
-    this.propagation,
+    required this.attracts,
+    required this.propagation,
     this.hardiness,
     this.hardinessLocation,
     this.flowers,
     this.floweringSeason,
-    this.soil = const [],
+    required this.soil,
     this.pestSusceptibility,
     this.cones,
     this.fruits,
@@ -107,85 +109,74 @@ class PlantDetails {
     this.careLevel,
     this.description,
     required this.defaultImage,
-    this.otherImages,
-    this.xWateringQuality,
-    this.xWateringPeriod,
-    this.xWateringAvgVolumeRequirement,
-    this.xWateringDepthRequirement,
+    required this.otherImages,
+    required this.xWateringQuality,
+    required this.xWateringPeriod,
+    required this.xWateringAvgVolumeRequirement,
+    required this.xWateringDepthRequirement,
     this.xWateringBasedTemperature,
     this.xWateringPhLevel,
     this.xSunlightDuration,
   });
 
   factory PlantDetails.fromJson(Map<String, dynamic> json) {
+    // Helper to map List<dynamic>? to List<String>
+    List<String> toStringList(dynamic raw) =>
+        (raw as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+    // Helper to map List<dynamic>? to List<T> via fromJson
+    List<T> toList<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) =>
+        (raw as List<dynamic>?)
+            ?.whereType<Map<String, dynamic>>()
+            .map(fromJson)
+            .toList() ??
+        [];
+
+    // Placeholder for missing images
+    final defaultImgJson = json['default_image'] as Map<String, dynamic>?;
+    final otherImgsRaw = json['other_images'] as List<dynamic>?;
+
     return PlantDetails(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       commonName: json['common_name'] as String?,
-      scientificName:
-          (json['scientific_name'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      otherName:
-          (json['other_name'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      scientificName: toStringList(json['scientific_name']),
+      otherName: toStringList(json['other_name']),
       family: json['family'] as String?,
       origin: json['origin'] as String?,
       type: json['type'] as String?,
       dimensions:
-          json['dimensions'] != null
-              ? Dimensions.fromJson(json['dimensions'] as Map<String, dynamic>)
+          json['dimensions'] is Map<String, dynamic>
+              ? Dimensions.fromJson(json['dimensions'])
               : null,
       cycle: json['cycle'] as String?,
       watering: json['watering'] as String?,
       wateringBenchmark:
-          json['watering_general_benchmark'] != null
+          json['watering_general_benchmark'] is Map<String, dynamic>
               ? WateringGeneralBenchmark.fromJson(
-                json['watering_general_benchmark'] as Map<String, dynamic>,
+                json['watering_general_benchmark'],
               )
               : null,
-      plantAnatomy:
-          (json['plant_anatomy'] as List<dynamic>?)
-              ?.map((e) => PlantAnatomy.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      sunlight:
-          (json['sunlight'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      pruningMonth:
-          (json['pruning_month'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      plantAnatomy: toList(json['plant_anatomy'], PlantAnatomy.fromJson),
+      sunlight: toStringList(json['sunlight']),
+      pruningMonth: toStringList(json['pruning_month']),
       pruningCount:
-          json['pruning_count'] != null
-              ? PruningCount.fromJson(
-                json['pruning_count'] as Map<String, dynamic>,
-              )
+          json['pruning_count'] is Map<String, dynamic>
+              ? PruningCount.fromJson(json['pruning_count'])
               : null,
       seeds: json['seeds'] as int?,
-      attracts:
-          (json['attracts'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      propagation:
-          (json['propagation'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      attracts: toStringList(json['attracts']),
+      propagation: toStringList(json['propagation']),
       hardiness:
-          json['hardiness'] != null
-              ? Hardiness.fromJson(json['hardiness'] as Map<String, dynamic>)
+          json['hardiness'] is Map<String, dynamic>
+              ? Hardiness.fromJson(json['hardiness'])
               : null,
       hardinessLocation:
-          json['hardiness_location'] != null
-              ? HardinessLocation.fromJson(
-                json['hardiness_location'] as Map<String, dynamic>,
-              )
+          json['hardiness_location'] is Map<String, dynamic>
+              ? HardinessLocation.fromJson(json['hardiness_location'])
               : null,
       flowers: json['flowers'] as bool?,
       floweringSeason: json['flowering_season'] as String?,
-      soil:
-          (json['soil'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-          [],
+      soil: toStringList(json['soil']),
       pestSusceptibility: json['pest_susceptibility'],
       cones: json['cones'] as bool?,
       fruits: json['fruits'] as bool?,
@@ -210,46 +201,30 @@ class PlantDetails {
       indoor: json['indoor'] as bool?,
       careLevel: json['care_level'] as String?,
       description: json['description'] as String?,
-      defaultImage: SpeciesImage.fromJson(
-        json['default_image'] as Map<String, dynamic>,
+      defaultImage: SpeciesImage.fromJson(defaultImgJson!),
+      otherImages: toList<SpeciesImage>(
+        otherImgsRaw,
+        (e) => SpeciesImage.fromJson(e),
       ),
-      otherImages:
-          (json['other_images'] as List<dynamic>?)
-              ?.map((e) => SpeciesImage.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      xWateringQuality:
-          (json['xWateringQuality'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      xWateringPeriod:
-          (json['xWateringPeriod'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      xWateringAvgVolumeRequirement:
-          (json['xWateringAvgVolumeRequirement'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      xWateringDepthRequirement:
-          (json['xWateringDepthRequirement'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      xWateringQuality: toStringList(json['xWateringQuality']),
+      xWateringPeriod: toStringList(json['xWateringPeriod']),
+      xWateringAvgVolumeRequirement: toStringList(
+        json['xWateringAvgVolumeRequirement'],
+      ),
+      xWateringDepthRequirement: toStringList(
+        json['xWateringDepthRequirement'],
+      ),
       xWateringBasedTemperature:
-          json['xWateringBasedTemperature'] != null
-              ? TemperatureRange.fromJson(
-                json['xWateringBasedTemperature'] as Map<String, dynamic>,
-              )
+          json['xWateringBasedTemperature'] is Map<String, dynamic>
+              ? TemperatureRange.fromJson(json['xWateringBasedTemperature'])
               : null,
       xWateringPhLevel:
-          json['xWateringPhLevel'] != null
-              ? PhLevel.fromJson(
-                json['xWateringPhLevel'] as Map<String, dynamic>,
-              )
+          json['xWateringPhLevel'] is Map<String, dynamic>
+              ? PhLevel.fromJson(json['xWateringPhLevel'])
               : null,
       xSunlightDuration:
-          json['xSunlightDuration'] != null
-              ? SunlightDuration.fromJson(
-                json['xSunlightDuration'] as Map<String, dynamic>,
-              )
+          json['xSunlightDuration'] is Map<String, dynamic>
+              ? SunlightDuration.fromJson(json['xSunlightDuration'])
               : null,
     );
   }
@@ -289,15 +264,18 @@ class WateringGeneralBenchmark {
 
 class PlantAnatomy {
   final String? part;
-  final List<String>? color;
+  final List<String> color;
 
-  PlantAnatomy({this.part, this.color});
+  PlantAnatomy({this.part, required this.color});
 
   factory PlantAnatomy.fromJson(Map<String, dynamic> json) {
     return PlantAnatomy(
       part: json['part'] as String?,
       color:
-          (json['color'] as List<dynamic>?)?.map((e) => e as String).toList(),
+          (json['color'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 }

@@ -1,10 +1,12 @@
+// lib/src/data/models/species_summary.dart
+
 import 'species_image.dart';
 
 class SpeciesSummary {
   final int id;
   final String? commonName;
-  final List<String>? scientificName;
-  final List<String>? otherName;
+  final List<String> scientificName;
+  final List<String> otherName;
   final String? family;
   final String? hybrid;
   final String? authority;
@@ -18,8 +20,8 @@ class SpeciesSummary {
   SpeciesSummary({
     required this.id,
     this.commonName,
-    this.scientificName,
-    this.otherName,
+    required this.scientificName,
+    required this.otherName,
     this.family,
     this.hybrid,
     this.authority,
@@ -32,17 +34,18 @@ class SpeciesSummary {
   });
 
   factory SpeciesSummary.fromJson(Map<String, dynamic> json) {
+    // Safely turn dynamic lists into List<String>
+    List<String> toStringList(dynamic raw) =>
+        (raw as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+    // Pull default_image as a nullable map
+    final imgJson = json['default_image'] as Map<String, dynamic>?;
+
     return SpeciesSummary(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       commonName: json['common_name'] as String?,
-      scientificName:
-          (json['scientific_name'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
-      otherName:
-          (json['other_name'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      scientificName: toStringList(json['scientific_name']),
+      otherName: toStringList(json['other_name']),
       family: json['family'] as String?,
       hybrid: json['hybrid'] as String?,
       authority: json['authority'] as String?,
@@ -51,9 +54,7 @@ class SpeciesSummary {
       variety: json['variety'] as String?,
       speciesEpithet: json['species_epithet'] as String?,
       genus: json['genus'] as String?,
-      defaultImage: SpeciesImage.fromJson(
-        json['default_image'] as Map<String, dynamic>,
-      ),
+      defaultImage: SpeciesImage.fromJson(imgJson),
     );
   }
 }
